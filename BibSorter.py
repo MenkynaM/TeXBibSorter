@@ -79,19 +79,6 @@ class BibSorter():
 					write_file.write(entry)
 			write_file.write(text[idx_end:])
 		return self.author_list
-# \ c i t e { t e s t }
-# 0 1 2 3 4 5 6 7 8 9 10
 
 
-
-# dizertacka_file = Path("D:\\Menkyna\\Documents\\TeX\\dizertacka\\dizertacka.tex")
-# diz = open(dizertacka_file, encoding="utf8")
-bib = BibSorter()
-final_list = bib.sort("dizertacka.tex")
-# for idx, item in enumerate(final_list):
-# 	print(str(idx + 1) + ') ' + item)
-# print(create_author_list(diz.read()))
-# diz.close()
-
-# print(final_list)
 # 
