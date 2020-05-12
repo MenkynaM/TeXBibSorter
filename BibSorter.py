@@ -1,6 +1,3 @@
-import os
-
-
 
 class BibSorter():
 	author_list = []
