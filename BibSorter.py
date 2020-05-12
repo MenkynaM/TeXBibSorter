@@ -62,8 +62,8 @@ class BibSorter():
 		with open(file, encoding="utf8") as orig_file:
 			text = orig_file.read()
 			idx_start = text.rfind('\\begin{thebibliography')
-			idx_next = text.find('\\bibitem')
-			idx_end = text.rfind('\\end{thebibliography')
+			idx_next = text.find('\\bibitem', idx_start)
+			idx_end = text.rfind('\\end{thebibliography', idx_start)
 			self.extract_bibliography(text[idx_start:idx_end])
 		with open(file[:-4] + '_copy.tex', 'w', encoding="utf8") as write_file:
 			write_file.write(text[:idx_next])
