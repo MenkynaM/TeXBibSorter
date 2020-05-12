@@ -55,7 +55,7 @@ class BibSorter():
 
 
 
-	def sort(self, file: str):
+	def sort(self, file: str) -> list:
 		with open(file, encoding="utf8") as orig_file:
 			for line in orig_file:
 				self.add_to_authorlist(line)
