@@ -77,5 +77,3 @@ class BibSorter():
 			write_file.write('\n' + text[idx_end:])
 		return self.author_list
 
-
-# 
