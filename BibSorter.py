@@ -31,7 +31,9 @@ class BibSorter():
 
 
 	def add_bibitem(self, bibitem: str):
-		bibitem = bibitem.strip()
+        # Remove commented sections of each line
+		bibitem = bibitem.strip().split('\n')
+        bibitem = '\n'.join([line[:line.find('%')] if '%' in line else line for line in bibitem])
 		idx_start = bibitem.find('{')
 		idx_end = bibitem.find('}', idx_start)
 		name = bibitem[idx_start + 1:idx_end]
@@ -56,24 +58,43 @@ class BibSorter():
 
 
 	def sort(self, file: str) -> list:
-		with open(file, encoding="utf8") as orig_file:
+        orig_bib = ''
+		with open(file, encoding="utf8") as orig_file, open(file[:-4] + '_copy.tex', 'w', encoding="utf8") as write_file:
 			for line in orig_file:
+                write_file.write(line)
+                if '\\begin{thebibliography' in line:
+                    break
 				self.add_to_authorlist(line)
-		with open(file, encoding="utf8") as orig_file:
-			text = orig_file.read()
-			idx_start = text.rfind('\\begin{thebibliography')
-			idx_next = text.find('\\bibitem', idx_start)
-			idx_end = text.rfind('\\end{thebibliography', idx_start)
-			self.extract_bibliography(text[idx_start:idx_end])
-		with open(file[:-4] + '_copy.tex', 'w', encoding="utf8") as write_file:
-			write_file.write(text[:idx_next])
-			for idx, author in enumerate(self.author_list):
-				# print(idx, author)
-				if author in self.author_list:
-					entry = f'\n% {str(idx + 1)}\n\\bibitem{{{author}}}\n{self.bibliography[author]}'
-					print(entry)
+            for line in orig_file:
+                if '\\end{thebibliography' in line:
+                    break
+                orig_bib += line
+            self.extract_bibliography(orig_bib)
+            for idx, author in enumerate(self.author_list):
+              # print(idx, author)
+              if author in self.author_list:
+                  entry = f'\n% {str(idx + 1)}\n\\bibitem{{{author}}}\n{self.bibliography[author]}'
+                  print(entry)
 
-					write_file.write(entry)
-			write_file.write('\n' + text[idx_end:])
+                  write_file.write(entry)
+            write_file.write('\\end{{thebibliography}}')
+            for line in orig_file:
+                write_file.write(line)
+		# with open(file, encoding="utf8") as orig_file:
+		# 	text = orig_file.read()
+		# 	idx_start = text.rfind('\\begin{thebibliography')
+		# 	idx_next = text.find('\\bibitem', idx_start)
+		# 	idx_end = text.rfind('\\end{thebibliography', idx_start)
+		# 	self.extract_bibliography(text[idx_start:idx_end])
+		# with open(file[:-4] + '_copy.tex', 'w', encoding="utf8") as write_file:
+		# 	write_file.write(text[:idx_next])
+		# 	for idx, author in enumerate(self.author_list):
+		# 		# print(idx, author)
+		# 		if author in self.author_list:
+		# 			entry = f'\n% {str(idx + 1)}\n\\bibitem{{{author}}}\n{self.bibliography[author]}'
+		# 			print(entry)
+
+		# 			write_file.write(entry)
+		# 	write_file.write('\n' + text[idx_end:])
 		return self.author_list
 
