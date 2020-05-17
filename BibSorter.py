@@ -73,11 +73,11 @@ class BibSorter():
             for idx, author in enumerate(self.author_list):
               # print(idx, author)
               if author in self.author_list:
-                  entry = f'\n% {str(idx + 1)}\n\\bibitem{{{author}}}\n{self.bibliography[author]}'
+                  entry = f'\n\n% {str(idx + 1)}\n\\bibitem{{{author}}}\n{self.bibliography[author]}'
                   print(entry)
 
                   write_file.write(entry)
-            write_file.write('\n\\end{{thebibliography}}')
+            write_file.write('\n\\end{thebibliography}\n')
             for line in orig_file:
                 write_file.write(line)
         orig_file.close()
