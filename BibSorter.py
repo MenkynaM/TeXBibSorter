@@ -1,3 +1,7 @@
+import sys, os
+import GUI as gui
+
+
 
 class BibSorter():
     author_list = []
@@ -59,7 +63,7 @@ class BibSorter():
 
     def sort(self, file: str) -> list:
         orig_bib = ''
-        with open(file, encoding="utf8") as orig_file, open(file[:-4] + '_copy.tex', 'w', encoding="utf8") as write_file:
+        with open(file, encoding="utf8") as orig_file, open(file[:-4] + '_sorted.tex', 'w', encoding="utf8") as write_file:
             for line in orig_file:
                 write_file.write(line)
                 if '\\begin{thebibliography' in line:
@@ -71,7 +75,6 @@ class BibSorter():
                 orig_bib += line
             self.extract_bibliography(orig_bib)
             for idx, author in enumerate(self.author_list):
-              # print(idx, author)
               if author in self.author_list:
                   entry = f'\n\n% {str(idx + 1)}\n\\bibitem{{{author}}}\n{self.bibliography[author]}'
                   print(entry)
@@ -83,3 +86,15 @@ class BibSorter():
         orig_file.close()
         write_file.close()
         return self.author_list
+
+
+if __name__ == "__main__":
+    if len(sys.argv) == 1:
+        gui.GUI()
+    if len(sys.argv) == 2:
+        file_name = sys.argv[1]
+        # print(os.path.dirname(__file__))
+        # file_path = os.path.join(os.path.dirname(__file__), file_name)
+        # print(file_path)
+        # print(file_name)
+        BibSorter().sort(file_name)
