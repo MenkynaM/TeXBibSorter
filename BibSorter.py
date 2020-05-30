@@ -3,7 +3,7 @@ import GUI as gui
 
 
 
-class BibSorter():
+class BibSorter:
     author_list = []
     bibliography = {}
 
@@ -93,8 +93,4 @@ if __name__ == "__main__":
         gui.GUI()
     if len(sys.argv) == 2:
         file_name = sys.argv[1]
-        # print(os.path.dirname(__file__))
-        # file_path = os.path.join(os.path.dirname(__file__), file_name)
-        # print(file_path)
-        # print(file_name)
         BibSorter().sort(file_name)
