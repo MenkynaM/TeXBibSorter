@@ -6,6 +6,8 @@ import BibSorter
 
 
 class GUI:
+    """ GUI for selecting a .tex file from the system
+    """    
     
 
     def __init__(self):

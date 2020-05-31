@@ -1,6 +1,6 @@
-import sys, os
+import sys
+import os
 import GUI as gui
-
 
 
 class BibSorter:
@@ -8,7 +8,8 @@ class BibSorter:
     bibliography = {}
 
     def get_authors(self, s: str):
-        if s == None: return
+        if s == None:
+            return
         # new_authors_list = [author.strip() for author in s.split(',') if author.strip() not in current]
         for author in s.split(','):
             tmp = author.strip()
@@ -23,7 +24,6 @@ class BibSorter:
         # Find the first instance of \cite cmd in the file and loop while there are still some
         idx_start = line.find('\\cite{')
 
-
         while idx_start != -1:
             # Find the end of the \cite to mark where authors are listed and extract them into a list using 'get_authors'
             idx_end = line.find('}', idx_start)
@@ -32,19 +32,17 @@ class BibSorter:
             line = line[idx_end + 1:]
             idx_start = line.find('\\cite{')
 
-
-
     def add_bibitem(self, bibitem: str):
         # Remove commented sections of each line
         bibitem = bibitem.strip().split('\n')
-        bibitem = '\n'.join([line[:line.find('%')] if '%' in line else line for line in bibitem])
+        bibitem = '\n'.join(
+            [line[:line.find('%')] if '%' in line else line for line in bibitem])
         idx_start = bibitem.find('{')
         idx_end = bibitem.find('}', idx_start)
         name = bibitem[idx_start + 1:idx_end]
         description = bibitem[idx_end + 1:]
         if name in self.author_list:
             self.bibliography[name] = description.strip()
-
 
     def extract_bibliography(self, old_bib: str):
         idx_start = old_bib.find('\\bibitem')
@@ -55,11 +53,6 @@ class BibSorter:
             self.add_bibitem(old_bib[:idx_end])
             old_bib = old_bib[idx_end + 1:]
             idx_start = old_bib.find('\\bibitem')
-
-
-
-
-
 
     def sort(self, file: str) -> list:
         orig_bib = ''
@@ -75,11 +68,10 @@ class BibSorter:
                 orig_bib += line
             self.extract_bibliography(orig_bib)
             for idx, author in enumerate(self.author_list):
-              if author in self.author_list:
-                  entry = f'\n\n% {str(idx + 1)}\n\\bibitem{{{author}}}\n{self.bibliography[author]}'
-                  print(entry)
-
-                  write_file.write(entry)
+                if author in self.author_list:
+                    entry = f'\n\n% {str(idx + 1)}\n\\bibitem{{{author}}}\n{self.bibliography[author]}'
+                    print(entry)
+                    write_file.write(entry)
             write_file.write('\n\\end{thebibliography}\n')
             for line in orig_file:
                 write_file.write(line)
