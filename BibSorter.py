@@ -55,6 +55,14 @@ class BibSorter:
             idx_start = old_bib.find('\\bibitem')
 
     def sort(self, file: str) -> list:
+        """ Sort bibliography in the selected .tex file with a path 'file'
+
+        Arguments:
+            file {str} -- path to .tex file
+
+        Returns:
+            list -- sorted \\bibitems with authors and discriptions
+        """
         orig_bib = ''
         with open(file, encoding="utf8") as orig_file, open(file[:-4] + '_sorted.tex', 'w', encoding="utf8") as write_file:
             for line in orig_file:
@@ -70,7 +78,6 @@ class BibSorter:
             for idx, author in enumerate(self.author_list):
                 if author in self.author_list:
                     entry = f'\n\n% {str(idx + 1)}\n\\bibitem{{{author}}}\n{self.bibliography[author]}'
-                    print(entry)
                     write_file.write(entry)
             write_file.write('\n\\end{thebibliography}\n')
             for line in orig_file:
